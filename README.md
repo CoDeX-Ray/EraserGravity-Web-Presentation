@@ -1,5 +1,4 @@
 # EraserGravity: Website Presentation 🪐
-![EraserGravity Overview](assets/hero.png) <!-- Assumes standard naming if a screenshot is generated, otherwise gracefully degrades -->
 
 **EraserGravity** is a high-performance, single-page "scrollytelling" presentation web application. It was designed to visually and interactively pitch the concept of "Agentic AI for Automated Network-as-Code" combining the reasoning power of Antigravity AI with the visual determinism of Eraser.io.
 
