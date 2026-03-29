@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EraserGravity: Agentic AI for Automated Network-as-Code</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- CDNs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+
+    <!-- 3D Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <main>
+        <!-- Section 1: Hero -->
+        <section class="hero-section" id="sec-1">
+            <div class="glass-panel" style="display: flex; flex-direction: column; align-items: center;">
+                <h1 class="stagger-el">EraserGravity</h1>
+                <div class="subtitle stagger-el">Agentic AI for Automated Network-as-Code</div>
+                <div class="author stagger-el">Raymundo De Borja III</div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Problem -->
+        <section id="sec-2">
+            <div class="glass-panel"
+                style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center;">
+                <div class="content-text">
+                    <h2 class="stagger-el">01 // The Problem</h2>
+                    <p class="stagger-el">Modern infrastructure moves at the speed of code, yet our diagrams remain
+                        frozen in time. Manual drag-and-drop networking tools create a dangerous disconnect between your
+                        live cloud environments and your architectural documentation.</p>
+                    <p class="stagger-el">When visual intent and deployed reality drift apart, resolving incidents
+                        becomes an exercise in archaeology. We need architecture diagrams that are generated, not drawn.
+                    </p>
+                </div>
+                <div class="content-img stagger-el">
+                    <img src="assets/problem.png" alt="The Problem"
+                        style="width: 100%; border-radius: 12px; border: 1px solid var(--glass-border); box-shadow: 0 15px 30px rgba(255, 95, 86, 0.2);">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Architecture -->
+        <section id="sec-3">
+            <div class="glass-panel"
+                style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: center;">
+                <div class="content-img stagger-el">
+                    <img src="assets/architecture.png" alt="The Architecture"
+                        style="width: 100%; border-radius: 12px; border: 1px solid var(--glass-border); box-shadow: 0 15px 30px rgba(0, 255, 204, 0.15);">
+                </div>
+                <div class="content-text">
+                    <h2 class="stagger-el">02 // The Architecture</h2>
+                    <p class="stagger-el">A hybrid workflow designed for absolute precision and speed.</p>
+                    <div class="stagger-el" style="display: flex; flex-direction: column; gap: 30px; margin-top: 30px;">
+                        <div>
+                            <h3 style="color:#fff; margin-bottom:15px; font-size:1.5rem;">The Brain <span
+                                    style="color:var(--accent); font-weight:300;">(Antigravity Agent)</span></h3>
+                            <p style="font-size:1rem; margin: 0;">Context-aware LLM reasoning. Under the hood, it parses
+                                user prompt topology and structurally translates it into logical networks.</p>
+                        </div>
+                        <div>
+                            <h3 style="color:#fff; margin-bottom:15px; font-size:1.5rem;">The Renderer <span
+                                    style="color:var(--accent); font-weight:300;">(Eraser.io)</span></h3>
+                            <p style="font-size:1rem; margin: 0;">Transforms raw, generated Domain Specific Language
+                                (DSL) into stunning, standardized architectural visualizations instantly.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Eraser.io Rendering Capabilities -->
+        <section id="sec-4">
+            <div class="glass-panel" style="max-width: 1200px; padding: 40px;">
+                <h2 class="stagger-el">03 // Eraser.io Rendering Capabilities</h2>
+                <p class="stagger-el" style="margin-bottom: 40px;">Antigravity generates the pure code topology, but Eraser.io brings it to life. It natively renders complex Architecture-as-Code into beautiful, standardized diagrams complete with rich visual elements.</p>
+                
+                <div class="tutorial-grid stagger-el">
+                    <div style="display: flex; flex-direction: column; gap: 30px;">
+                        <div class="glass-panel" style="padding: 30px; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); box-shadow: none;">
+                            <h3 style="color: #fff; margin-bottom: 10px; font-weight: 600;">🧩 Smart Elements</h3>
+                            <p style="font-size: 1rem; margin: 0;">Automatically maps logical concepts to standard networking shapes (Databases, Load Balancers, Gateways) using simple bracket syntax like <code>[Master DB]</code>.</p>
+                        </div>
+                        <div class="glass-panel" style="padding: 30px; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); box-shadow: none;">
+                            <h3 style="color: #fff; margin-bottom: 10px; font-weight: 600;">🎨 Rich Icons</h3>
+                            <p style="font-size: 1rem; margin: 0;">Supports thousands of tech-stack icons directly embedded into nodes. From AWS and Azure logos to generic IT symbols, it instantly communicates service functionality.</p>
+                        </div>
+                        <div class="glass-panel" style="padding: 30px; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); box-shadow: none;">
+                            <h3 style="color: #fff; margin-bottom: 10px; font-weight: 600;">🖼️ Embedded Imagery & Grouping</h3>
+                            <p style="font-size: 1rem; margin: 0;">Beyond basic shapes, Eraser.io can render custom images and complex grouping bounding-boxes to illustrate multi-layered cloud native environments exactly as envisioned.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="tutorial-media" style="position: relative; height: 100%; min-height: 450px; display: flex; align-items: center; justify-content: center; background: #050505; border-color: var(--accent); overflow: hidden;">
+                        <!-- Mock rendering of Eraser.io diagram using pure HTML/CSS -->
+                        <div style="position: absolute; width: 100%; height: 100%; background-image: radial-gradient(circle, #222 1px, transparent 1px); background-size: 20px 20px; opacity: 0.5;"></div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 20px; align-items: center; position: relative; z-index: 2;">
+                            <div style="background: #1a1a24; border: 1px solid #00ffcc; padding: 15px 30px; border-radius: 8px; font-weight: bold; display: flex; align-items: center; gap: 10px; font-family: 'Outfit', sans-serif;">
+                                <span style="font-size: 1.5rem;">🌐</span> Cloud Gateway
+                            </div>
+                            <div style="width: 2px; height: 40px; background: #00ffcc;"></div>
+                            
+                            <div style="display: flex; gap: 40px; padding: 30px; border: 1px dashed #555; border-radius: 12px; position: relative; background: rgba(255,255,255,0.02);">
+                                <div style="position: absolute; top: -12px; left: 20px; background: #050505; padding: 0 10px; color: #888; font-size: 0.8rem; text-transform: uppercase;">Private Subnet</div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                                    <div style="background: #1a1a24; border: 1px solid #00ffcc; padding: 15px 30px; border-radius: 8px; font-weight: bold; display: flex; align-items: center; gap: 10px; font-family: 'Outfit', sans-serif;">
+                                        <span style="font-size: 1.5rem;">🖥️</span> Web Server
+                                    </div>
+                                    <div style="width: 2px; height: 30px; background: #00ffcc;"></div>
+                                    <div style="background: #1a1a24; border: 1px solid #00ffcc; padding: 15px 30px; border-radius: 20px; font-weight: bold; display: flex; align-items: center; gap: 10px; font-family: 'Outfit', sans-serif;">
+                                        <span style="font-size: 1.5rem;">🗄️</span> DB Cluster
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="media-caption">Eraser.io Rendering Simulation</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: The Unlimited Bypass -->
+        <section id="sec-5">
+            <div class="glass-panel"
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+                <div class="content-text">
+                    <h2 class="stagger-el">04 // The Unlimited Bypass</h2>
+                    <p class="stagger-el">Eraser.io imposes a 5-credit limit for its native AI diagram generation.
+                        EraserGravity renders this irrelevant.</p>
+                    <p class="stagger-el">By leveraging our local Agent's superior reasoning, we construct the Eraser
+                        DSL string entirely clientside. We then pass this pure code string to Eraser's standard
+                        rendering pipeline, completely bypassing the AI paywall. Infinite generation, zero cost.</p>
+                </div>
+                <div class="content-img stagger-el">
+                    <img src="assets/bypass.png" alt="The Unlimited Bypass"
+                        style="width: 100%; border-radius: 12px; border: 1px solid var(--glass-border); box-shadow: 0 15px 30px rgba(0, 255, 204, 0.2);">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Technical Installation -->
+        <section id="sec-6">
+            <div class="glass-panel">
+                <h2 class="stagger-el">05 // Technical Installation</h2>
+                <p class="stagger-el">Zero-friction setup. Plug the context engine straight into your environment.</p>
+
+                <div class="tutorial-grid stagger-el">
+                    <div class="tutorial-steps">
+                        <div class="step">
+                            <div class="step-num">1</div>
+                            <div class="step-content">
+                                <h4>Access MCP Config</h4>
+                                <p>Open your Antigravity IDE and navigate to the root directory where the agent runs, or
+                                    directly open your global `mcp.json` settings.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">2</div>
+                            <div class="step-content">
+                                <h4>Install Eraser Node</h4>
+                                <p>Run the installation script in the IDE terminal to attach the Eraser diagramming
+                                    module.</p>
+
+                                <div class="terminal-body" style="padding: 15px 0 0 0;">
+                                    <div class="code-block"
+                                        style="margin-bottom: 0; padding: 15px; font-size: 0.95rem;">
+                                        <button class="copy-btn" data-clipboard="npx skills add eraserlabs/eraser-io"
+                                            style="top: 10px; right: 10px; padding: 4px 8px; font-size: 0.8rem;">Copy</button>
+                                        <pre><span class="comment"># Add Eraser MCP integration</span>
+> <span class="cmd">npx</span> skills add eraserlabs/eraser-io</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">3</div>
+                            <div class="step-content">
+                                <h4>Bind the Server</h4>
+                                <p>Add the Eraser capabilities payload structure into your workspace configuration. The
+                                    agent will automatically detect and warm up the new endpoints.</p>
+
+                                <div class="terminal-body" style="padding: 15px 0 0 0;">
+                                    <div class="code-block"
+                                        style="margin-bottom: 0; padding: 15px; font-size: 0.95rem;">
+                                        <button class="copy-btn" data-clipboard='{
+  "mcpServers": {
+    "eraser": {
+      "command": "npx",
+      "args": [ "-y", "@eraserlabs/mcp-server" ]
+    }
+  }
+}' style="top: 10px; right: 10px; padding: 4px 8px; font-size: 0.8rem;">Copy</button>
+                                        <pre><span class="comment"># mcp.json configuration</span>
+{
+  <span class="string">"mcpServers"</span>: {
+    <span class="string">"eraser"</span>: {
+      <span class="string">"command"</span>: <span class="string">"npx"</span>,
+      <span class="string">"args"</span>: [ <span class="string">"-y"</span>, <span class="string">"@eraserlabs/mcp-server"</span> ]
+    }
+  }
+}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tutorial-media" style="align-self: flex-start; position: sticky; top: 100px;">
+                        <img src="assets/eraser_tutorial.png" alt="Eraser Antigravity IDE Integration Tutorial">
+                        <div class="media-caption">Antigravity IDE - Skills Configuration Panel</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Conclusion & Export -->
+        <section id="sec-7">
+            <div class="glass-panel" style="text-align: center;">
+                <h2 class="stagger-el">06 // Conclusion</h2>
+                <p class="stagger-el" style="max-width: 800px; margin: 0 auto;">EraserGravity bridges the gap between
+                    infrastructure thought and visual reality. By merging agentic generation with deterministic
+                    rendering, architecture diagrams are no longer drawn—they are deployed.</p>
+
+                <div class="stagger-el">
+                    <button class="pptx-btn" id="exportBtn">Download PPTX</button>
+                    <p style="font-size: 0.9rem; margin-top: 15px; text-transform: uppercase;">10-Slide Deck Generated
+                        Locally</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+
+</html>
