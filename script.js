@@ -43,11 +43,14 @@ interactiveEls.forEach(el => {
 const initThreeJS = () => {
     const canvas = document.getElementById('bg-canvas');
     const scene = new THREE.Scene();
+    window.scene = scene;
 
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 50;
+    window.camera = camera;
 
-    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true, preserveDrawingBuffer: true });
+    window.renderer = renderer;
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
 
@@ -244,90 +247,120 @@ document.querySelectorAll('section').forEach((sec, i) => {
 // --- PPTX EXPORT LOGIC ---
 const exportBtn = document.getElementById('exportBtn');
 
-exportBtn.addEventListener('click', () => {
+exportBtn.addEventListener('click', async () => {
     // Change button state
-    exportBtn.innerText = "Generating...";
+    exportBtn.innerText = "Capturing...";
     exportBtn.style.opacity = "0.8";
+    exportBtn.disabled = true;
 
-    // Initialize PptxGenJS
-    let pres = new PptxGenJS();
+    try {
+        // Force internal GSAP elements to be completely visible simultaneously
+        gsap.set('.stagger-el', { autoAlpha: 1, y: 0, overwrite: 'auto' });
 
-    // Common styles
-    const bgProps = { color: '0A0A0F' };
-    const titleProps = { x: 0.5, y: 0.8, w: '90%', fontSize: 36, color: '00FFCC', bold: true, fontFace: 'Outfit' };
-    const bodyProps = { x: 0.5, y: 1.8, w: '90%', fontSize: 18, color: 'FFFFFF', fontFace: 'Outfit', lineSpacing: 30 };
+        // Hide custom cursor during capture so user doesn't have to move it away
+        const cursors = document.querySelectorAll('.cursor-dot, .cursor-ring');
+        cursors.forEach(c => c.style.display = 'none');
 
-    // Function to create a standard slide
-    const createSlide = (title, bodyText) => {
-        let slide = pres.addSlide();
-        slide.background = bgProps;
-        slide.addText(title, titleProps);
-        if (Array.isArray(bodyText)) {
-            // List
-            slide.addText(bodyText.map(t => ({ text: t })), { ...bodyProps, bullet: { type: 'number' } });
-        } else {
-            slide.addText(bodyText, bodyProps);
+        // Fix unreadable h1 text (html2canvas bugs out on background-clip: text)
+        // Add deep text-shadows to push the text off the bright 3D backdrop geometries
+        const headings = document.querySelectorAll('h1, h2');
+        headings.forEach(h => {
+            h.dataset.origBg = h.style.background || '';
+            h.dataset.origClip = h.style.webkitBackgroundClip || '';
+            h.dataset.origFill = h.style.webkitTextFillColor || '';
+            h.dataset.origColor = h.style.color || '';
+            h.dataset.origShadow = h.style.textShadow || '';
+            
+            h.style.background = 'none';
+            h.style.webkitBackgroundClip = 'initial';
+            h.style.webkitTextFillColor = 'initial';
+            h.style.color = '#ffffff';
+            h.style.textShadow = '0px 10px 40px rgba(0, 0, 0, 1), 0px 4px 10px rgba(0, 0, 0, 0.8)';
+        });
+
+        // Initialize PptxGenJS
+        let pres = new PptxGenJS();
+        pres.layout = 'LAYOUT_16x9';
+
+        const sections = document.querySelectorAll('section');
+
+        // Loop through each section, scroll to it, and capture the viewport
+        for (let i = 0; i < sections.length; i++) {
+            const sec = sections[i];
+            
+            // Align viewport exactly to the top of the section
+            sec.scrollIntoView({ behavior: 'instant', block: 'start' });
+            
+            // Wait for scroll layout to shift and browser paint 
+            await new Promise(r => setTimeout(r, 500));
+
+            // Force WebGL to flush current scene to buffer so html2canvas can read it
+            if (window.renderer && window.scene && window.camera) {
+                window.renderer.render(window.scene, window.camera);
+            }
+
+            // Capture full bounds to guarantee zero cutoff at the bottom edges
+            const rect = sec.getBoundingClientRect();
+            const targetY = window.scrollY + rect.top;
+            const captureHeight = rect.height > window.innerHeight ? rect.height : window.innerHeight;
+
+            const canvasData = await html2canvas(document.body, {
+                x: window.scrollX,
+                y: targetY,
+                width: window.innerWidth,
+                height: captureHeight,
+                scale: 2, 
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: '#050505',
+            });
+
+            let slide = pres.addSlide();
+            slide.background = { color: '050505' };
+            
+            // Apply explicit full-stretch bounding mapped to the exact PPT layout
+            // This prevents tall sections from being aggressively cropped off at the bottom,
+            // while stretching slightly horizontal so it never "shrinks" into a tiny letterbox.
+            slide.addImage({ 
+                data: canvasData.toDataURL("image/png"), 
+                x: 0, 
+                y: 0, 
+                w: '100%', 
+                h: '100%' 
+            });
         }
-        return slide;
-    };
 
-    // 10 Slides mapped from the 7 sections
-
-    // Slide 1: Hero
-    let slide1 = pres.addSlide();
-    slide1.background = bgProps;
-    slide1.addText("EraserGravity", { x: '10%', y: '35%', w: '80%', fontSize: 54, color: 'FFFFFF', bold: true, align: 'center', fontFace: 'Outfit' });
-    slide1.addText("Agentic AI for Automated Network-as-Code", { x: '10%', y: '50%', w: '80%', fontSize: 24, color: '00FFCC', align: 'center', fontFace: 'Outfit' });
-    slide1.addText("Raymundo De Borja III", { x: '10%', y: '65%', w: '80%', fontSize: 16, color: '666666', align: 'center', fontFace: 'Outfit' });
-
-    // Slide 2: The Problem - Context
-    createSlide("The Problem: Static Diagrams", "Modern infrastructure moves at the speed of code, yet our diagrams remain frozen in time. Manual drag-and-drop networking tools create a dangerous disconnect between live environments and documentation.");
-
-    // Slide 3: The Problem - Impact
-    createSlide("The Problem: Incident Resolution", "When visual intent and deployed reality drift apart, resolving incidents becomes an exercise in archaeology. We need architecture diagrams that are generated, not drawn.");
-
-    // Slide 4: The Architecture - Overview
-    createSlide("The Architecture", "A hybrid workflow designed for absolute precision and speed bridging intelligent context with deterministic rendering.");
-
-    // Slide 5: The Architecture - Components
-    let slide5 = createSlide("Architecture Components", "");
-    slide5.addText("The Brain (Antigravity Agent)\nContext-aware LLM reasoning parsing user prompt topology into logical networks.", { x: 0.5, y: 1.8, w: '40%', fontSize: 16, color: 'FFFFFF', fontFace: 'Outfit' });
-    slide5.addText("The Renderer (Eraser.io)\nTransforms raw, generated Domain Specific Language (DSL) into stunning architectural visualizations instantly.", { x: 5.0, y: 1.8, w: '45%', fontSize: 16, color: 'FFFFFF', fontFace: 'Outfit' });
-
-    // Slide 6: Eraser.io Rendering Capabilities
-    createSlide("Eraser.io Rendering Engine", [
-        "Smart Elements: Automatically maps concepts to standard networking shapes.",
-        "Rich Icons: Supports thousands of tech-stack icons directly embedded into nodes.",
-        "Group Boundaries: Beautiful grouping bounding-boxes for subnets."
-    ]);
-
-    // Slide 7: The Unlimited Bypass
-    createSlide("The Unlimited Bypass", "Eraser.io imposes a 5-credit limit for its native AI diagram generation.\n\nBy leveraging our local Agent's superior reasoning, we construct the Eraser DSL string entirely client-side. We then pass this pure code string to Eraser's standard rendering pipeline, completely bypassing the AI paywall. Infinite generation, zero cost.");
-
-    // Slide 8: Technical Installation - Command
-    createSlide("Technical Setup: MCP Integration", "Zero-friction setup. Plug the context engine straight into your environment using the CLI.\n\nCommand:\n$ npx skills add eraserlabs/eraser-io");
-
-    // Slide 9: Technical Installation - Config
-    createSlide("Technical Setup: Configuration", "mcp.json snippet:\n\n\"mcpServers\": {\n  \"eraser\": {\n    \"command\": \"npx\",\n    \"args\": [ \"-y\", \"@eraserlabs/mcp-server\" ]\n  }\n}");
-
-    // Slide 10: Conclusion
-    let slide10 = pres.addSlide();
-    slide10.background = bgProps;
-    slide10.addText("Conclusion", { ...titleProps, align: 'center' });
-    slide10.addText("EraserGravity bridges the gap between infrastructure thought and visual reality. By merging agentic generation with deterministic rendering, architecture diagrams are no longer drawn—they are deployed.", { x: 1, y: 2, w: '80%', fontSize: 24, color: 'FFFFFF', align: 'center', fontFace: 'Outfit' });
-
-    // Save the File
-    pres.writeFile({ fileName: "EraserGravity_Presentation.pptx" }).then(() => {
+        exportBtn.innerText = "Saving PPTX...";
+        await pres.writeFile({ fileName: "EraserGravity_Presentation.pptx" });
+        
         exportBtn.innerText = "Downloaded!";
         exportBtn.style.opacity = "1";
-        setTimeout(() => {
-            exportBtn.innerText = "Download PPTX";
-        }, 3000);
-    }).catch((err) => {
+
+    } catch (err) {
         console.error(err);
         exportBtn.innerText = "Error (See Console)";
         exportBtn.style.background = "#ff5f56";
-    });
+    } finally {
+        setTimeout(() => {
+            // Restore context 
+            window.scrollTo(0, 0);
+
+            // Restore cursors
+            document.querySelectorAll('.cursor-dot, .cursor-ring').forEach(c => c.style.display = 'block');
+            
+            // Restore h1 styling
+            document.querySelectorAll('h1, h2').forEach(h => {
+                h.style.background = h.dataset.origBg;
+                h.style.webkitBackgroundClip = h.dataset.origClip;
+                h.style.webkitTextFillColor = h.dataset.origFill;
+                h.style.color = h.dataset.origColor;
+                h.style.textShadow = h.dataset.origShadow;
+            });
+
+            exportBtn.innerText = "Download PPTX";
+            exportBtn.disabled = false;
+        }, 3000);
+    }
 });
 
 // --- COPY TO CLIPBOARD LOGIC ---
